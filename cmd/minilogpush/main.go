@@ -11,8 +11,22 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "hello"})
 }
 
-func registerRoutes(mux *http.ServeMux) {
+func logsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "logs"})
+}
+
+func newMux() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.Handle("/v1/", http.StripPrefix("/v1", v1Routes()))
+	return mux
+}
+
+func v1Routes() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/logs", logsHandler)
 	mux.HandleFunc("/hello", helloHandler)
+	return mux
 }
 
 func main() {
@@ -23,8 +37,7 @@ func main() {
 }
 
 func serve(cfg *Config) {
-	mux := http.NewServeMux()
-	registerRoutes(mux)
+	mux := newMux()
 
 	srv := &http.Server{
 		Addr:         ":" + cfg.Addr,

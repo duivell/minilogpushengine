@@ -11,3 +11,7 @@ __debug_bin*
 # Claude Code local settings
 .claude/settings.json
 minilogpush-project-2026-10.md
+
+# make start/stop/restart runtime files
+.minilogpush.pid
+minilogpush.log
