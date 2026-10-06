@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"mini-log-push/internal/ingest"
 	"net/http"
 	"time"
 )
@@ -9,11 +10,6 @@ import (
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "hello"})
-}
-
-func logsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"message": "logs"})
 }
 
 func newMux() *http.ServeMux {
@@ -24,7 +20,8 @@ func newMux() *http.ServeMux {
 
 func v1Routes() *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/logs", logsHandler)
+	logsHandler := ingest.NewLogHandler()
+	mux.HandleFunc("/logs", logsHandler.ServeHTTP)
 	mux.HandleFunc("/hello", helloHandler)
 	return mux
 }
