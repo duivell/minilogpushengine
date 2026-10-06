@@ -1,0 +1,13 @@
+# Build artifacts (make build / make debug)
+/bin/
+__debug_bin*
+
+# Go test binaries
+*.test
+
+# OS cruft
+.DS_Store
+
+# Claude Code local settings
+.claude/settings.json
+minilogpush-project-2026-10.md
